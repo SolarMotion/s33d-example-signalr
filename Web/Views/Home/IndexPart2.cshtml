@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Booking";
+}
+
+<link rel="stylesheet" href="~/Content/flex-1.0.0.css" />
+<script src="~/Scripts/flex-1.0.0.js" defer></script>
+
+<div class="row">
+    <div class="col-md-6" style="min-height:70px;">
+        <h1>Floor 2</h1>
+    </div>
+    <div class="col-md-6 text-right" style="min-height:70px; display: flex; justify-content: flex-end; align-items: flex-end;">
+        <a href="@Url.Content("~/Home/Index")">Go to Floor 1</a>
+    </div>
+</div>
+
+<div class="main-div">
+    <div class="flex-container">
+        <div class="flex-item" data-status="Skip" data-name="None"></div>
+        <div class="flex-item" data-status="Skip" data-name="None">1</div>
+        <div class="flex-item" data-status="Skip" data-name="None">2</div>
+        <div class="flex-item" data-status="Skip" data-name="None">3</div>
+        <div class="flex-item" data-status="Skip" data-name="None">4</div>
+        <div class="flex-item" data-status="Skip" data-name="None">5</div>
+    </div>
+
+    <div class="flex-container">
+        <div class="flex-item" data-status="Skip" data-name="None">A</div>
+        <div id="flex-item-A1" class="flex-item" data-status="Sold" data-name="A1" data-tooltip="Sold">A1</div>
+        <div id="flex-item-A2" class="flex-item" data-status="Sold" data-name="A2" data-tooltip="Available">A2</div>
+        <div id="flex-item-A3" class="flex-item" data-status="Sold" data-name="A3" data-tooltip="Available">A3</div>
+        <div id="flex-item-A4" class="flex-item" data-status="Pending" data-name="A4" data-tooltip="Available">A4</div>
+        <div id="flex-item-A5" class="flex-item" data-status="Available" data-name="A5" data-tooltip="Available">A5</div>
+    </div>
+
+    <div class="flex-container">
+        <div class="flex-item" data-status="Skip" data-name="None">B</div>
+        <div class="flex-item" data-status="Available" data-name="B1" data-tooltip="Available">B1</div>
+        <div class="flex-item" data-status="Sold" data-name="B2" data-tooltip="Sold">B2</div>
+    </div>
+
+    <div class="flex-container">
+        <div class="flex-item" data-status="Skip" data-name="None">C</div>
+        <div class="flex-item" data-status="Available" data-name="C1" data-tooltip="Available">C1</div>
+        <div class="flex-item" data-status="Available" data-name="C2" data-tooltip="Sold">C2</div>
+        <div class="flex-item" data-status="Pending" data-name="C4" data-tooltip="Sold">C4</div>
+    </div>
+</div>
+
+
+

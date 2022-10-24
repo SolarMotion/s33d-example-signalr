@@ -1,0 +1,75 @@
+﻿@using Web.Models;
+@model WindowPopupViewModel
+
+@{
+    ViewBag.Title = "Booking";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="padding-left:20px;">
+
+    <h2>@ViewBag.Message</h2>
+
+    @if (Model.CssID != null && Model.Floor != null)
+    {
+        <div style="display:flex;">
+            <div style="padding-right:20px;">
+                <button id="btnBack">Back</button>
+            </div>
+            <div style="padding-right:20px;">
+                <button id="btnPending">Pending</button>
+            </div>
+            <div style="padding-right:20px;">
+                <button id="btnSold">Sold</button>
+            </div>
+        </div>
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        function callNewBooking(status) {
+            const uri = `https://signalrwebapi.azurewebsites.net/api/newbooking`;
+            let data = { Floor: '@Model.Floor', ID: 0, CssID: '@Model.CssID', Status: status };
+
+            $.ajax({
+                url: uri,
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log(`@Model.Floor ==> @Model.CssID updated to ${status}.`);
+                    window.close();
+                },
+                error: function (error) {
+                    console.log('Something is wrong with Api.', error);
+                }
+            });
+        }
+
+        $('#btnPending').click(function () {
+            callNewBooking('Pending');
+        });
+
+        $('#btnSold').click(function () {
+            callNewBooking('Sold');
+        });
+
+        $('#btnBack').click(function () {
+            window.close();
+        });
+    });
+</script>

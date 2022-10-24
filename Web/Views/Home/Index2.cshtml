@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Booking";
+}
+
+<button id="btnClick">Update</button>
+
+@section Scripts{
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="https://signalrwebapi.azurewebsites.net/signalr/hubs"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.connection.hub.url = 'https://signalrwebapi.azurewebsites.net/signalr';
+            var bookingHubProxy = $.connection.bookingHub;
+
+            bookingHubProxy.client.clientNewBooking = function (request) {
+                console.log(`Floor:${request.Floor} === ID:${request.ID} === CssID:${request.CssID} === Status:${request.Status}`);
+            };
+
+            $.connection.hub.connectionSlow(function () {
+                console.log('We are currently experiencing difficulties with the connection. Please reload the page.')
+            });
+
+            $.connection.hub.error(function (error) {
+                console.log('Server error: ' + error)
+            });
+
+            $.connection.hub.disconnected(function () {
+                if ($.connection.hub.lastError) {
+                    alert("Disconnected. Reason: " + $.connection.hub.lastError.message);
+                }
+            });
+
+            $.connection.hub.start()
+                .done(function () {
+                    console.log('Now connected, connection ID=' + $.connection.hub.id);
+                })
+                .fail(function () {
+                    console.log('Could not Connect!');
+                });
+
+            $('#btnClick').click(function () {
+                bookingHubProxy.server.serverNewBooking({Floor:'1', ID: 1, CssID: 'flex-item-1', Status: 'Pending'}).done(function () {
+                    console.log('Invocation of ServerNewBooking succeeded');
+                }).fail(function (error) {
+                    console.log('Invocation of ServerNewBooking failed. Error: ' + error);
+                });
+            });
+        });
+    </script>
+}

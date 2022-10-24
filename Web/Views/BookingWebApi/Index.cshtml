@@ -1,0 +1,113 @@
+﻿@using Web.Models;
+
+@model BookingWebApiViewModel
+
+@{
+    ViewBag.Title = "Booking";
+    int count = 1;
+    int nextFloor = Model.Floor == 1 ? 2 : 1;
+}
+
+<link rel="stylesheet" href="~/Content/flex-1.0.0.css" />
+<script src="~/Scripts/flex-1.0.0.js" defer></script>
+
+<div class="row">
+    <div class="col-md-6" style="min-height:70px;">
+        <h1>Floor @Model.Floor</h1>
+    </div>
+    <div class="col-md-6 text-right" style="min-height:70px; display: flex; justify-content: flex-end; align-items: flex-end;">
+        <a href="@Url.Content("~/BookingWebApi/Index?floor=" + @nextFloor)">Go to Floor @nextFloor</a>
+    </div>
+</div>
+
+<div class="main-div">
+    @Html.HiddenFor(a => a.Floor)
+
+    @if (Model.Rows != null && Model.Rows.Count > 0)
+    {
+        <div class="flex-container">
+            <div class="flex-item" data-status="Skip" data-name="None"></div>
+            <div class="flex-item" data-status="Skip" data-name="None">1</div>
+            <div class="flex-item" data-status="Skip" data-name="None">2</div>
+            <div class="flex-item" data-status="Skip" data-name="None">3</div>
+            <div class="flex-item" data-status="Skip" data-name="None">4</div>
+            <div class="flex-item" data-status="Skip" data-name="None">5</div>
+        </div>
+
+        foreach (var row in Model.Rows)
+        {
+            <div class="flex-container">
+
+                @if (count == 1)
+                {
+                    <div class="flex-item" data-status="Skip" data-name="None">A</div>
+                }
+                else if (count == 2)
+                {
+                    <div class="flex-item" data-status="Skip" data-name="None">B</div>
+                }
+                else
+                {
+                    <div class="flex-item" data-status="Skip" data-name="None">C</div>
+                }
+
+                @foreach (var unit in row.Units)
+                {
+                    <div id="@unit.CssID" class="flex-item" data-id="@unit.ID" data-status="@unit.Status" data-name="@unit.Name" data-tooltip="@unit.Status">@unit.Name</div>
+                }
+            </div>
+
+            count++;
+        }
+    }
+</div>
+
+@section Scripts{
+    <script>
+        function getLatestBooking() {
+            let floor = $('#Floor').val();
+            const uri = `https://signalrwebapi.azurewebsites.net/api/booking/${floor}`;
+
+            fetch(uri, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: null
+            })
+                .then(response => response.json())
+                .then((result) => {
+                    result.Data.Rows.forEach(row => {
+                        row.Units.forEach(unit => {
+
+                            var flexItemID = `#flex-item-${unit.ID}`;
+
+                            var flexItem = $(flexItemID);
+
+                            if (flexItem && flexItem.data('status') != unit.Status) {
+                                let newColour = '';
+
+                                if (unit.Status == 'Available') {
+                                    newColour = 'green-colour';
+                                }
+                                else if (unit.Status == 'Pending') {
+                                    newColour = 'gray-colour';
+                                }
+                                else {
+                                    newColour = 'red-colour';
+                                }
+
+                                flexItem.removeClass('green-colour gray-colour red-colour').addClass(newColour);
+                                flexItem.attr('data-status', unit.Status);
+                                flexItem.attr('data-tooltip', unit.Status);
+                            }
+                        });
+                    });
+                })
+                .catch(error => console.error('Something is wrong with Api.', error));
+        }
+
+        setInterval(getLatestBooking, 10000);
+    </script>
+}

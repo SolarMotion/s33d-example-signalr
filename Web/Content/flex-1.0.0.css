@@ -1,0 +1,65 @@
+﻿.main-div {
+    margin-top: 20px;
+    min-height: 500px;
+    border: 3px solid;
+    padding-bottom: 20px;
+}
+
+/*Flexbox Start*/
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    width: 100px;
+    margin: 10px;
+    text-align: center;
+    line-height: 75px;
+    font-size: 30px;
+    border-radius:3px;
+}
+/*Flexbox End*/
+
+/*Colour Start*/
+.green-colour {
+    background-color: #01FF70;
+}
+
+.red-colour {
+    background-color: #FF4136;
+}
+
+.gray-colour {
+    background-color: #AAAAAA;
+}
+
+.transparent-colour {
+    background-color: transparent;
+}
+
+.green-colour:hover {
+    background-color: #FFDC00;
+}
+
+.red-colour:hover {
+    cursor: not-allowed;
+}
+
+.gray-colour:hover {
+    cursor: not-allowed;
+}
+/*Colour End*/
+
+/*Tooltip Start*/
+.is-item:hover:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    padding: 5px 10px;
+    margin: -50px 0 0 45px;
+    background: #0074D9;
+    color: white;
+    border-radius: 3px;
+    color: #B3DBFF;
+}
+/*Tooltip End*/
